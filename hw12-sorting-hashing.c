@@ -14,16 +14,16 @@
 #define MAX_HASH_TABLE_SIZE 	MAX_ARRAY_SIZE
 
 /* 필요에 따라 함수 추가 가능 */
-int initialize(int **a);		//
-int freeArray(int *a);
-void printArray(int *a);
+int initialize(int **a);		//정렬 전 초기화하는 함수
+int freeArray(int *a);			//정렬을 위해 할당받은 메모리 반납하는 함수
+void printArray(int *a);		//현재 배열의 상태를 출력하는 함수
 
-int selectionSort(int *a);
-int insertionSort(int *a);
-int bubbleSort(int *a);
-int shellSort(int *a);
+int selectionSort(int *a);		//선택정렬을 하는 함수
+int insertionSort(int *a);		//삽입정렬을 하는 함수
+int bubbleSort(int *a);			//버블정렬을 하는 함수
+int shellSort(int *a);			//셸정렬을 하는 함수
 /* recursive function으로 구현 */
-int quickSort(int *a, int n);
+int quickSort(int *a, int n);	//퀵정렬을 하는 함수
 
 
 /* hash code generator, key % MAX_HASH_TABLE_SIZE */
@@ -39,12 +39,14 @@ int search(int *ht, int key);
 int main()
 {
 	char command;
-	int *array = NULL;
+	int *array = NULL;		//배열의 메모리 공간을 가리킬 포인터
 	int *hashtable = NULL;
 	int key = -1;
 	int index = -1;
 
 	srand(time(NULL));		//난수 생성 시 중복방지를 위함
+
+	printf("[----- [Cho Joon Hee]  [2017038076] -----]\n");
 
 	do{
 		printf("----------------------------------------------------------------\n");
@@ -62,30 +64,30 @@ int main()
 
 		switch(command) {
 		case 'z': case 'Z':
-			initialize(&array);
+			initialize(&array);		//정렬 전 초기화 실행
 			break;
 		case 'q': case 'Q':
-			freeArray(array);
+			freeArray(array);		//프로그램 종료 전 할당받은 메모리 반납
 			break;
 		case 's': case 'S':
-			selectionSort(array);
+			selectionSort(array);	//선택정렬 실행
 			break;
 		case 'i': case 'I':
-			insertionSort(array);
+			insertionSort(array);	//삽입정렬 실행
 			break;
 		case 'b': case 'B':
-			bubbleSort(array);
+			bubbleSort(array);		//버블정렬 실행
 			break;
 		case 'l': case 'L':
-			shellSort(array);
+			shellSort(array);		//셸정렬 실행
 			break;
 		case 'k': case 'K':
 			printf("Quick Sort: \n");
 			printf("----------------------------------------------------------------\n");
-			printArray(array);
-			quickSort(array, MAX_ARRAY_SIZE);
+			printArray(array);		//정렬 전 현재 배열상태 출력
+			quickSort(array, MAX_ARRAY_SIZE);	//퀵정렬 실행
 			printf("----------------------------------------------------------------\n");
-			printArray(array);
+			printArray(array);		//정렬 후 배열 상태 출력
 
 			break;
 
@@ -283,28 +285,28 @@ int quickSort(int *a, int n)	//퀵정렬을 하는 함수
 	int v, t;
 	int i, j;
 
-	if (n > 1)
+	if (n > 1)		//n이 1보다 클 경우
 	{
-		v = a[n-1];
-		i = -1;
-		j = n - 1;
+		v = a[n-1];	//피벗 값 설정
+		i = -1;		//i는 -1부터 시작
+		j = n - 1;	//j는 오른쪽부터 시작
 
 		while(1)
 		{
-			while(a[++i] < v);
-			while(a[--j] > v);
+			while(a[++i] < v);	//피벗보다 작은 값을 찾음,i는 피벗보다 작은 index값을 가짐
+			while(a[--j] > v);	//피벗보다 큰 값을 찾음,j는 피벗보다 큰 index값을 가짐
 
-			if (i >= j) break;
-			t = a[i];
+			if (i >= j) break;	//i가 j보다 크거나 같다면, 크로스되었다면 반복문탈출
+			t = a[i];		//i,j가 크로스 되지 않았다면 오른쪽과 왼쪽 값을 스왑해줌
 			a[i] = a[j];
 			a[j] = t;
 		}
-		t = a[i];
+		t = a[i];	//피벗값을 i번째 위치로 바꿔줌
 		a[i] = a[n-1];
 		a[n-1] = t;
 
-		quickSort(a, i);
-		quickSort(a+i+1, n-i-1);
+		quickSort(a, i);		//바뀐 위치의 피벗보다 작은 값들이 위치한 부분집합 재귀적으로 퀵정렬 진행
+		quickSort(a+i+1, n-i-1);	//피벗보다 큰 값들이 위치한 부분집합 퀵정렬 진행
 	}
 
 
