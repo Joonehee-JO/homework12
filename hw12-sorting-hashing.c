@@ -305,8 +305,8 @@ int quickSort(int *a, int n)	//퀵정렬을 하는 함수
 		a[i] = a[n-1];
 		a[n-1] = t;
 
-		quickSort(a, i);		//바뀐 위치의 피벗보다 작은 값들이 위치한 부분집합 재귀적으로 퀵정렬 진행
-		quickSort(a+i+1, n-i-1);	//피벗보다 큰 값들이 위치한 부분집합 퀵정렬 진행
+		quickSort(a, i);		//바뀐 위치의 피벗보다 큰 값들이 위치한 부분집합 재귀적으로 퀵정렬 진행
+		quickSort(a+i+1, n-i-1);	//피벗보다 작은 값들이 위치한 부분집합 퀵정렬 진행
 	}
 
 
@@ -350,7 +350,7 @@ int hashing(int *a, int **ht)	//해시테이블을 생성 후 해싱하는 함�
 		if (hashtable[hashcode] == -1)	//해시테이블에서 해당 버킷이 비어있을 경우
 		{
 			hashtable[hashcode] = key;	//해당 버킷에 키값을 사상시킴
-		} else 	{		//키값을 사상시킬 때 충돌과 오버플로과 발생한다면
+		} else 	{		//키값을 사상시킬 때 충돌과 오버플로가 발생한다면
 
 			index = hashcode;	//index에 버킷값 저장
 
