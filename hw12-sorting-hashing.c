@@ -27,20 +27,20 @@ int quickSort(int *a, int n);	//퀵정렬을 하는 함수
 
 
 /* hash code generator, key % MAX_HASH_TABLE_SIZE */
-int hashCode(int key);
+int hashCode(int key);	//들어온 key의 홈 버킷을 리턴하는 함수
 
 /* array a에대 한 hash table을 만든다. */
-int hashing(int *a, int **ht);
+int hashing(int *a, int **ht);	//해시테이블을 생성 후 해싱하는 함수
 
 /* hash table에서 key를 찾아 hash table의 index return */
-int search(int *ht, int key);
+int search(int *ht, int key);	//해시테이블에서 입력한 key값에 맞는 버킷인덱스를 리턴하는 함수
 
 
 int main()
 {
 	char command;
 	int *array = NULL;		//배열의 메모리 공간을 가리킬 포인터
-	int *hashtable = NULL;
+	int *hashtable = NULL;	//해시테이블을 가리킬 포인터
 	int key = -1;
 	int index = -1;
 
@@ -94,21 +94,21 @@ int main()
 		case 'h': case 'H':
 			printf("Hashing: \n");
 			printf("----------------------------------------------------------------\n");
-			printArray(array);
-			hashing(array, &hashtable);
-			printArray(hashtable);
+			printArray(array);			//해싱 전 현재 배열 상태 출력
+			hashing(array, &hashtable);	//해싱함수 실행
+			printArray(hashtable);		//해싱 후 현재 해시테이블 출력
 			break;
 
 		case 'e': case 'E':
 			printf("Your Key = ");
-			scanf("%d", &key);
-			printArray(hashtable);
-			index = search(hashtable, key);
-			printf("key = %d, index = %d,  hashtable[%d] = %d\n", key, index, index, hashtable[index]);
+			scanf("%d", &key);			//찾을 key값 입력
+			printArray(hashtable);		//함수 실행 전 현재 해시테이블 출력
+			index = search(hashtable, key);	//해시테이블에서 입력한 key값에 맞는 버킷 주소를 저장
+			printf("key = %d, index = %d,  hashtable[%d] = %d\n", key, index, index, hashtable[index]);	//해당 버킷 주소 출력
 			break;
 
 		case 'p': case 'P':
-			printArray(array);
+			printArray(array);		//현재 배열 상태를 출력
 			break;
 		default:
 			printf("\n       >>>>>   Concentration!!   <<<<<     \n");
@@ -313,23 +313,23 @@ int quickSort(int *a, int n)	//퀵정렬을 하는 함수
 	return 0;
 }
 
-int hashCode(int key) {
-   return key % MAX_HASH_TABLE_SIZE;
+int hashCode(int key) {	//들어온 key의 홈 버킷을 리턴하는 함수
+   return key % MAX_HASH_TABLE_SIZE;	//0~12 사이의 수 리턴
 }
 
-int hashing(int *a, int **ht)
+int hashing(int *a, int **ht)	//해시테이블을 생성 후 해싱하는 함수
 {
-	int *hashtable = NULL;
+	int *hashtable = NULL;	//해시테이블을 가리킬 포인터
 
 	/* hash table이 NULL인 경우 메모리 할당 */
-	if(*ht == NULL) {
-		hashtable = (int*)malloc(sizeof(int) * MAX_ARRAY_SIZE);
+	if(*ht == NULL) {	//해시테이블 공간을 할당받지 않았었다면
+		hashtable = (int*)malloc(sizeof(int) * MAX_ARRAY_SIZE);		//메모리공간 할당받음
 		*ht = hashtable;  /* 할당된 메모리의 주소를 복사 --> main에서 배열을 control 할수 있도록 함*/
 	} else {
 		hashtable = *ht;	/* hash table이 NULL이 아닌경우, table 재활용, reset to -1 */
 	}
 
-	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
+	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)	//해싱 전 해시테이블 -1로 초기화
 		hashtable[i] = -1;
 
 	/*
@@ -342,44 +342,44 @@ int hashing(int *a, int **ht)
 	int index = -1;
 	for (int i = 0; i < MAX_ARRAY_SIZE; i++)
 	{
-		key = a[i];
-		hashcode = hashCode(key);
+		key = a[i];		//a의 i번째 값 key에 저장
+		hashcode = hashCode(key);	//해당 key값의 버킷 저장
 		/*
 		printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]);
 		*/
-		if (hashtable[hashcode] == -1)
+		if (hashtable[hashcode] == -1)	//해시테이블에서 해당 버킷이 비어있을 경우
 		{
-			hashtable[hashcode] = key;
-		} else 	{
+			hashtable[hashcode] = key;	//해당 버킷에 키값을 사상시킴
+		} else 	{		//키값을 사상시킬 때 충돌과 오버플로과 발생한다면
 
-			index = hashcode;
+			index = hashcode;	//index에 버킷값 저장
 
-			while(hashtable[index] != -1)
+			while(hashtable[index] != -1)	//비어있는 버킷을 찾음
 			{
-				index = (++index) % MAX_HASH_TABLE_SIZE;
+				index = (++index) % MAX_HASH_TABLE_SIZE;	//모드 연산을 통해 index값 변경
 				/*
 				printf("index = %d\n", index);
 				*/
 			}
-			hashtable[index] = key;
+			hashtable[index] = key;	//비어있는 버킷에 들어온 key값 매핑시킴
 		}
 	}
 
 	return 0;
 }
 
-int search(int *ht, int key)
+int search(int *ht, int key)	//해시테이블에서 입력한 key값에 맞는 주소를 리턴하는 함수
 {
-	int index = hashCode(key);
+	int index = hashCode(key);	//입력한 key값의 버킷값을 index에 저장
 
-	if(ht[index] == key)
-		return index;
+	if(ht[index] == key)	//해시테이블의 해당 버킷 index에 입력한 값이 매핑되어있다면
+		return index;		//해당 index 리턴
 
-	while(ht[++index] != key)
+	while(ht[++index] != key)	//입력한 값이 매핑되어있지 않다면 입력한 값을 찾을 때까지 반복문을 돌음
 	{
-		index = index % MAX_HASH_TABLE_SIZE;
+		index = index % MAX_HASH_TABLE_SIZE;	//해시테이블 크기만큼 index사이즈 조정
 	}
-	return index;
+	return index;	//입력한 값이 매핑되어있는 버킷 index 리턴
 }
 
 
